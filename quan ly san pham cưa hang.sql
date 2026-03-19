@@ -1,56 +1,56 @@
--- Tạo bảng products
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50),
+    name VARCHAR(100),
     category VARCHAR(50),
-    price DECIMAL(10,2),
-    stock INT
+    price INT,
+    stock INT,
+    manufacturer VARCHAR(50)
 );
 
--- Thêm dữ liệu mẫu
-INSERT INTO products (name, category, price, stock) VALUES
-('Laptop Dell', 'Electronics', 1500.00, 5),
-('Chuột Logitech', 'Electronics', 25.50, 50),
-('Bàn phím Razer', 'Electronics', 120.00, 20),
-('Tủ lạnh LG', 'Home Appliances', 800.00, 3),
-('Máy giặt Samsung', 'Home Appliances', 600.00, 2);
+-- 2. Thêm dữ liệu mẫu (theo đề bài)
+INSERT INTO products (name, category, price, stock, manufacturer) VALUES
+('Laptop Dell XPS 13', 'Laptop', 25000000, 12, 'Dell'),
+('Chuột Logitech M90', 'Phụ kiện', 150000, 50, 'Logitech'),
+('Bàn phím cơ Razer', 'Phụ kiện', 2200000, 0, 'Razer'),
+('Macbook Air M2', 'Laptop', 32000000, 7, 'Apple'),
+('iPhone 14 Pro Max', 'Điện thoại', 35000000, 15, 'Apple'),
+('Laptop Dell XPS 13', 'Laptop', 25000000, 12, 'Dell'),
+('Tai nghe AirPods 3', 'Phụ kiện', NULL, NULL, 'Apple');
 
--- 1. Thêm sản phẩm mới
-INSERT INTO products (name, category, price, stock)
-VALUES ('Điều hòa Panasonic', 'Home Appliances', 400.00, 10);
+-- 3. Chèn dữ liệu mới: Chuột không dây Logitech M170
+INSERT INTO products (name, category, price, stock, manufacturer)
+VALUES ('Chuột không dây Logitech M170', 'Phụ kiện', 300000, 20, 'Logitech');
 
--- 2. Cập nhật stock của 'Laptop Dell' thành 7
+-- 4. Cập nhật: tăng giá tất cả sản phẩm của Apple thêm 10%
 UPDATE products
-SET stock = 7
-WHERE name = 'Laptop Dell';
+SET price = price * 1.1
+WHERE manufacturer = 'Apple';
 
--- 3. Xóa các sản phẩm có stock bằng 0
+-- 5. Xóa sản phẩm có stock = 0
 DELETE FROM products
 WHERE stock = 0;
 
--- 4. Liệt kê tất cả sản phẩm theo giá tăng dần
+-- 6. Hiển thị sản phẩm có price BETWEEN 1000000 AND 30000000
 SELECT * FROM products
-ORDER BY price ASC;
+WHERE price BETWEEN 1000000 AND 30000000;
 
--- 5. Liệt kê danh mục duy nhất của các sản phẩm
-SELECT DISTINCT category
+-- 7. Hiển thị sản phẩm có stock IS NULL
+SELECT * FROM products
+WHERE stock IS NULL;
+
+-- 8. Liệt kê danh sách hãng sản xuất duy nhất
+SELECT DISTINCT manufacturer
 FROM products;
 
--- 6. Liệt kê sản phẩm có giá từ 100 đến 1000
+-- 9. Hiển thị toàn bộ sản phẩm, sắp xếp giảm dần theo giá, sau đó tăng dần theo tên
 SELECT * FROM products
-WHERE price BETWEEN 100 AND 1000;
+ORDER BY price DESC, name ASC;
 
--- 7. Liệt kê các sản phẩm có tên chứa từ 'LG' hoặc 'Samsung'
+-- 10. Tìm sản phẩm có tên chứa từ "laptop" (không phân biệt hoa thường)
 SELECT * FROM products
-WHERE name ILIKE '%LG%'
-   OR name ILIKE '%Samsung%';
+WHERE name ILIKE '%laptop%';
 
--- 8. Hiển thị 2 sản phẩm đầu tiên theo giá giảm dần
+-- 11. Lấy về 2 sản phẩm đầu tiên sau khi sắp xếp theo giá giảm dần
 SELECT * FROM products
 ORDER BY price DESC
 LIMIT 2;
-
--- 9. Lấy sản phẩm thứ 2 đến thứ 3 theo giá giảm dần
-SELECT * FROM products
-ORDER BY price DESC
-LIMIT 2 OFFSET 1;
